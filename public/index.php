@@ -10,4 +10,25 @@ $calendar = new Calendar($dbo, "2020-01-01 12:00:00");
 
 // display the calendar HTML
 
-echo $calendar->buildCalendar();
+
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events Calendar</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+  <div id="content">
+    <?= $calendar->buildCalendar(); ?>
+
+  </div>
+
+</body>
+
+</html>

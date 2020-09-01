@@ -193,7 +193,7 @@ class Calendar extends DB_Connect
 
     $html = "\n\t<h2>$calMonth</h2>";
     for ($d = 0, $labels = NULL; $d < 7; ++$d) {
-      $labels .= "\n\t<li>" . WEEKDAYS[$d] . "</li>";
+      $labels .= "\n\t\t<li>" . WEEKDAYS[$d] . "</li>";
     }
     $html .= "\n\t<ul class=\"weekdays\">"
       . $labels . "\n\t</ul>";
@@ -206,14 +206,13 @@ class Calendar extends DB_Connect
     // Create the calendar markup
     $html .= "\n\t<ul>"; // Start unordered list
     for ($i = 1, $c = 1, $t = date('j'), $m = date('m'), $y = date('Y'); $c <= $this->_daysInMonth; ++$i) {
+
       // Apply a "fill" class to the boxes occurring before the first of the month
       $class = $i <= $this->_startDay ? 'fill' : NULL;
 
-
-
       // Add a "today" class if the current date matches the current date
       if (
-        $c + 1 == $t
+        $c == $t
         && $m == $this->_m
         && $y == $this->_y
       ) {
@@ -226,6 +225,7 @@ class Calendar extends DB_Connect
 
       //Add the day of the month to identify the calendar box
       if ($this->_startDay < $i && $this->_daysInMonth >= $c) {
+
         // Format events data
         $eventInfo = ''; // clear the variable
         if (isset($events[$c])) {
@@ -240,10 +240,9 @@ class Calendar extends DB_Connect
       }
 
       // If the current day is a Saturday, wrap to the next row
-      $wrap = $i != 0 && $i % 7 == 0 ? "\n\t</ul><ul>" : NULL;
+      $wrap = $i != 0 && $i % 7 == 0 ? "\n\t</ul>\n\t<ul>" : NULL;
 
       // Assemble the pieces into a finished item
-
       $eventInfo = $eventInfo ?? '';
 
       $html .= $liStart . $date  . $eventInfo . $liEnd . $wrap;
@@ -252,11 +251,11 @@ class Calendar extends DB_Connect
     // Add filler to finish out the last week
     while ($i % 7 != 1) {
       $html .= "\n\t\t<li class=\"fill\">&nbsp;</li>";
-      $i++;
+      ++$i;
     }
 
     // close the unordered list
-    $html .= "\n\t<ul>\n\n";
+    $html .= "\n\t</ul>\n\n";
 
     // return the markup for output
     return $html;
