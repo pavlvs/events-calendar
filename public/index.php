@@ -8,27 +8,16 @@ include_once '../sys/core/init.inc.php';
 // Load the calendar for January
 $calendar = new Calendar($dbo, "2020-01-01 12:00:00");
 
-// display the calendar HTML
+// Set up the page title and CSS files
+$pageTitle = 'Events Calendar';
+$cssFiles = ['style.css'];
 
-
+include 'assets/common/header.inc.php'
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Events Calendar</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-</head>
+<div id="content">
+  <!-- Display the calendar HTML -->
+  <?= $calendar->buildCalendar(); ?>
+</div>
 
-<body>
-
-  <div id="content">
-    <?= $calendar->buildCalendar(); ?>
-
-  </div>
-
-</body>
-
-</html>
+<?php include 'assets/common/footer.inc.php' ?>
