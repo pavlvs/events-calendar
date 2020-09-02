@@ -2,12 +2,20 @@
 
 declare(strict_types=1);
 
-// Make sure the event ID was passed
-if (isset($_POST['eventId'])) {
+//Enable sessions if needed
+$status = session_status();
+
+if ($status == PHP_SESSION_NONE) {
+  // There is no active session
+  session_start();
+}
+// Make sure the event ID was passed and the user is logged in
+if (isset($_POST['eventId']) && isset($_SESSION['user'])) {
   // Collect the event ID from the URL string
   $id = (int)$_POST['eventId'];
 } else {
-  //Send the user to the main page if no ID is supplied
+  // Send the user to the main page if no ID is supplied
+  // or the user is not logged in
   header('Location: ./');
   exit;
 }

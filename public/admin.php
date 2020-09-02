@@ -6,6 +6,13 @@ declare(strict_types=1);
 
 include_once '../sys/core/init.inc.php';
 
+// if the user is not logged in, send them to the main file
+
+if (!isset($_SESSION['user'])) {
+  header('Location: ./');
+  exit;
+}
+
 //Output the header
 $pageTitle = 'Add/Edit Event';
 $cssFiles = ['style.css', 'admin.css'];

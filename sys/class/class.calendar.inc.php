@@ -441,10 +441,24 @@ FORM_MARKUP;
    */
   private function _adminGeneralOptions()
   {
-    // Display admin controls
-    return <<<ADMIN_OPTIONS
+    // If the user is logged in, display admin controls
+    if (isset($_SESSION['user'])) {
+      return <<<ADMIN_OPTIONS
+
     <a href="admin.php" class="admin" >+ Add a new Event</a>
+    <form action="assets/inc/process.inc.php" method="post">
+      <div>
+        <input type="submit" name="" id="" value="Log Out" class="logout" >
+        <input type="hidden" name="token" id="" value="$_SESSION[token]">
+        <input type="hidden" name="action" id="" value="userLogout">
+      </div>
+    </form>
 ADMIN_OPTIONS;
+    } else {
+      return <<<ADMIN_OPTIONS
+    <a href="login.php">Login</a>
+ADMIN_OPTIONS;
+    }
   }
 
   /**
@@ -455,7 +469,10 @@ ADMIN_OPTIONS;
    */
   private function _adminEntryOptions($id)
   {
-    return <<<ADMIN_OPTIONS
+    if (isset($_SESSION['user'])) {
+      # code...
+
+      return <<<ADMIN_OPTIONS
     <div class="adminOptions" >
     <form action="admin.php" method="post">
     <p>
@@ -471,6 +488,9 @@ ADMIN_OPTIONS;
     </form>
     </div><!--end .adminOptions -->
 ADMIN_OPTIONS;
+    } else {
+      return NULL;
+    }
   }
 
   /**

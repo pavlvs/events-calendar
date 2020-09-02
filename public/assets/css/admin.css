@@ -6,6 +6,10 @@ legend {
   font-weight: bold;
 }
 
+label {
+  margin: 10px 0 6px 0;
+}
+
 input[type=text], input[type=password], label{
   display: block;
   font-weight: bold;

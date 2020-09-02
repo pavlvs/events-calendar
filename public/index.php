@@ -18,6 +18,9 @@ include 'assets/common/header.inc.php'
 <div id="content">
   <!-- Display the calendar HTML -->
   <?= $calendar->buildCalendar(); ?>
-</div>
+</div><!-- end #content -->
+<p>
+  <?= isset($_SESSION['user']) ? 'Logged In!' : 'Logged Out!' ?>
+</p>
 
 <?php include 'assets/common/footer.inc.php' ?>
