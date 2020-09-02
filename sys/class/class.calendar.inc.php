@@ -185,13 +185,14 @@ class Calendar extends DB_Connect
      *  to label the calendar columns
      */
     $calMonth = date('F Y', strtotime($this->_useDate));
+    $calId = date('Y-m', strtotime($this->_useDate));
     define('WEEKDAYS', array('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'));
 
     /**
      * Add a header to the calendar markup
      */
 
-    $html = "\n\t<h2>$calMonth</h2>";
+    $html = "\n\t<h2 id=\"month-$calId\" >$calMonth</h2>";
     for ($d = 0, $labels = NULL; $d < 7; ++$d) {
       $labels .= "\n\t\t<li>" . WEEKDAYS[$d] . "</li>";
     }
@@ -384,10 +385,10 @@ FORM_MARKUP;
       // cast the event ID as an integer for security
       $id = (int)$_POST["eventId"];
       $sql = "UPDATE events
-      SET eventTitle = :eventTitle,
-      eventDesc = :eventDescription,
-      eventStart = :eventStart,
-      eventEnd = :eventEnd
+      SET eventTitle = :title,
+      eventDesc = :description,
+      eventStart = :start,
+      eventEnd = :end
       WHERE eventId = $id";
     }
     // Execute the create or edit query after binding the data
@@ -399,7 +400,11 @@ FORM_MARKUP;
       $sth->bindParam(':end', $end, PDO::PARAM_STR);
       $sth->execute();
       $sth->closeCursor();
-      return true;
+      if (empty($_POST['eventId'])) {
+        return $this->db->lastInsertId();
+      } else {
+        return true;
+      }
     } catch (Exception $e) {
       return $e->getMessage();
     }

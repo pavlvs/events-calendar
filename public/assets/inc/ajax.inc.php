@@ -25,6 +25,22 @@ define('ACTIONS', [
     'eventView' => [
         'object' => 'Calendar',
         'method' => 'displayEvent'
+    ],
+    'editEvent' => [
+        'object' => 'Calendar',
+        'method' => 'displayForm'
+    ],
+    'eventEdit' => [
+        'object' => 'Calendar',
+        'method' => 'processForm'
+    ],
+    'deleteEvent' => [
+        'object' => 'Calendar',
+        'method' => 'confirmDelete'
+    ],
+    'confirmDelete' => [
+        'object' => 'Calendar',
+        'method' => 'confirmDelete'
     ]
 ]);
 

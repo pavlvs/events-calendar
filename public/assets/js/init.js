@@ -67,6 +67,101 @@ $(function () {
                     $(this).remove();
                 });
             },
+
+            // adds a new event to the markup after saving
+            addevent: function (data, formData) {
+                // converts the query string to an object
+                let entry = fx.deserialize(formData),
+                    // makes a date object for current month
+                    cal = new Date(NaN),
+                    // Makes a date object for the new event
+                    event = new Date(NaN),
+                    // Extracts the calendar month from the h2 id
+                    cdata = $('h2').attr('id').split('-'),
+                    // Extracts the event day, month and year
+                    date = entry.eventStart.split(' ')[0],
+                    // splits the event data into pieces
+                    edata = date.split('-');
+
+                // Sets the date for the calendar date object
+                cal.setFullYear(cdata[1], cdata[2], 1);
+
+                // Sets thedate for the event date object
+                event.setFullYear(edata[0], edata[1], edata[2]);
+
+                // since the date object is created using
+                // GMT, then adjusted for the local time zone,
+                // adjust the offset to ensure a proper date
+                event.setMinutes(event.getTimezoneOffset());
+
+                // if the year and month match, start the process
+                // of adding the new event to the calendar
+                if (
+                    cal.getFullYear() == event.getFullYear() &&
+                    cal.getMonth() == event.getMonth()
+                ) {
+                    // get the day of the month for event
+                    let day = String(event.getDate());
+
+                    // Adds a leading zero to 1-digit days
+                    day = day.length == 1 ? '0' + day : day;
+
+                    // adds the new date link
+                    $('<a>')
+                        .hide()
+                        .attr('href', 'view.php?eventId=' + data)
+                        .text(entry.eventTitle)
+                        .insertAfter($('strong:contains(' + day + ')'))
+                        .delay(1000)
+                        .fadeIn('slow');
+                }
+            },
+
+            // removes an event from the markup after deletion
+            removeevent: function () {
+                // removes any event with the class 'active'
+                $('.active').fadeOut('slow', function () {
+                    $(this).remove();
+                });
+            },
+
+            // deserializes the query string and returns
+            // an event object
+            deserialize: function (str) {
+                // breaks apart each name-value pair
+                let data = str.split('&'),
+                    // declares varibles for use in the loop
+                    pairs = [],
+                    entry = {},
+                    key,
+                    val;
+
+                // loops through each name-value pair
+                for (const x in data) {
+                    // splits each pair into an array
+                    pairs = data[x].split('=');
+
+                    // the first element is the name
+                    key = pairs[0];
+
+                    // second element is the value
+                    val = pairs[1];
+
+                    // reverses the URL encoding and stores
+                    // each value as an object property
+                    entry[key] = fx.urldecode(val);
+                }
+                return entry;
+            },
+
+            // decodes a query string value
+            urldecode: function (str) {
+                // converts plus signs to spaces
+                let converted = str.replace(/\+/g, ' ');
+
+                // converts any encoded entities back
+                return decodeURIComponent(converted);
+            },
         };
 
     // Pulls up events in a modal window
@@ -111,5 +206,106 @@ $(function () {
         });
         //log the link text
         console.log(data);
+    });
+
+    // Displays the edit form as a modal window
+    $('body').on('click', '.admin-options form, .admin', function (event) {
+        // prevents the form from submitting
+        event.preventDefault();
+
+        // loads the action for the processing file
+        const action = $(event.target).attr('name') || 'editEvent',
+            // saves the value of the eventId input
+            id = $(event.target).siblings('input[name=eventId]').val();
+
+        // Creates an additional param for the ID if set
+        id = id != undefined ? '&eventId=' + id : '';
+
+        // loads the editing form and displays it
+        $.ajax({
+            type: 'POST',
+            url: processFile,
+            data: 'action=' + action + id,
+            success: function (data) {
+                // hides the form
+                let form = $(data).hide(),
+                    // Make sure the modal window exists
+                    modal = fx
+                        .initModal()
+                        .children(':not(.modal-close-btn)')
+                        .remove()
+                        .end();
+
+                // call the boxin function to create
+                // the modal overlay and fade it in
+                fx.boxin(null, modal);
+
+                // Load the form into the window,
+                // fades in the content and adds
+                // a class to the form
+                form.appendTo(modal).addClass('edit-form').fadeIn('slow');
+            },
+            error: function (msg) {
+                alert(msg);
+            },
+        });
+    });
+
+    // make the cancel button on editing form behave like the
+    // close button and fade out modal windows and overlays
+    $('body').on('click', '.edit-form a:contains(cancel)', function (event) {
+        fx.boxout(event);
+    });
+
+    // edits events without reloading
+    $('body').on('click', '.edit-form input[type=submit]', function (event) {
+        // prevents the default form action from executing
+        event.preventDefault();
+
+        // serializes the form data for use with $.ajax
+        let formData = $(this).parents('form').serialize();
+
+        // stores the value of the submit button
+        (submitVal = $(this).val()),
+            // determines if the event should be removed
+            (remove = false);
+
+        // if this is the deletion form, appends an action
+        if ($(this).attr('name') == 'confirmDelete') {
+            // adds necessary info to the query string
+            formData += '&action=confirmDelete' + '&confirmDelete=' + submitVal;
+
+            // If the event is really being deleted, sets
+            // a flag to remove it from the markup
+            if (submitVal == 'Yes, delete it') {
+                remove = true;
+            }
+        }
+
+        // sends the form data for use with $.ajax()
+        $.ajax({
+            type: 'POST',
+            url: processFile,
+            data: formData,
+            success: function (data) {
+                // if this is a deleted event, removes
+                // it form the markup
+                if (remove === true) {
+                    fx.removeevent();
+                }
+
+                // fades out the modal window
+                fx.boxout();
+
+                // If this is a new event, adds it to
+                // the calendar
+                if ($('[name=eventId]').val().length == 0 && remove === false) {
+                    fx.addevent(data, formData);
+                }
+            },
+            error: function (msg) {
+                alert(msg);
+            },
+        });
     });
 });
