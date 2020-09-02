@@ -56,7 +56,7 @@ class Event
    * @param array  $event Associative array of event data
    * @return void
    */
-  public function __construct($event)
+  public function __construct($event = NULL)
   {
 
     if (is_array($event)) {
@@ -72,7 +72,11 @@ class Event
       $this->start = $start;
       $this->end = $end;
     } else {
-      throw new Exception("No event data was supplied.");
+      $this->id = NULL;
+      $this->title = "";
+      $this->description = "";
+      $this->start = "";
+      $this->end = "";
     }
   }
 }

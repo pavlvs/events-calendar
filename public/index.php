@@ -10,7 +10,7 @@ $calendar = new Calendar($dbo, "2020-01-01 12:00:00");
 
 // Set up the page title and CSS files
 $pageTitle = 'Events Calendar';
-$cssFiles = ['style.css'];
+$cssFiles = ['style.css', 'admin.css'];
 
 include 'assets/common/header.inc.php'
 ?>

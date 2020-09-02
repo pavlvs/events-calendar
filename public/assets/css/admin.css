@@ -1,0 +1,70 @@
+fieldset {
+  border: 0;
+}
+legend {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+input[type=text], input[type=password], label{
+  display: block;
+  font-weight: bold;
+  width: 70%;
+}
+textarea {
+  height: 200px;
+  width: 99%;
+}
+
+input[type=text], input[type=password], textarea {
+  border: 1px solid #123;
+  border-radius: 6px;
+  box-shadow: inset 1px 2px 4px #789;
+  font-family: georgia serif;
+  font-size: 16px;
+  margin: 0 0 4px;
+  padding: 4px;
+}
+
+input[type=submit] {
+  background-color: #789;
+  border: 1px solid #123;
+  border-radius: 6px;
+  box-shadow: inset -2px -1px 3px #345,
+  inset 1px 1px 3px #bcf,
+  1px 2px 6px #789;
+  cursor: pointer;
+  font-family: georgia serif;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 4px 0;
+  padding: 4px;
+  text-shadow: 0px 0px 1px #fff;
+  text-transform: uppercase;
+}
+
+.adminOptions {
+  text-align: center;
+}
+
+.adminOptions form, .adminOptions p {
+  display: inline;
+}
+
+.admin {
+  background-color: #789;
+  border: 1px solid #123;
+  box-shadow: inset -2px -1px 3px #345,
+  inset 1px 1px 3px #bcf,
+  1px 2px 6px #789;
+  color: #000;
+  display: inline-block;
+  font-family: georgia serif;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 4px 0;
+  padding: 4px;
+  text-decoration: none;
+  text-shadow: 0px 0px 1px #fff;
+  text-transform: uppercase;
+}
