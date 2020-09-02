@@ -1,0 +1,44 @@
+.modal-overlay {
+  background-color: rgba(0,0,0, .5);
+  bottom: 0;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 4;
+}
+
+.modal-window {
+  background-color: #fff;
+  border: 2px solid #000;
+  border-radius: 6px;
+  box-shadow: 0 0 14px #123;
+  height: auto;
+  left: 50%;
+  margin-left: -150px;
+  padding: 20px;
+  position: absolute;
+  top: 140px;
+  width: 300px;
+  z-index: 5;
+}
+
+.modal-close-btn {
+  color: #000;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  right: 4px;
+  text-decoration: none;
+  top: 0;
+}
+
+.modal-close-btn:before {
+  content: 'Close';
+  font-size: 10px;
+  position: relative;
+  text-transform: uppercase;
+  top: -1px;
+}

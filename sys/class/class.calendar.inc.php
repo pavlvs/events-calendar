@@ -296,7 +296,6 @@ class Calendar extends DB_Connect
     // Generate and return the markup
     return "<h2>$event->title</h2>"
       . "\n\t <p class=\"dates\">$date, $start&mdash;$end</p>"
-      . "\n\t<p class=\"\">$event->description</p>"
       . "\n\t<p>$event->description</p>$admin";
   }
 
