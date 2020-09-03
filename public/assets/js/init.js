@@ -1,7 +1,7 @@
 'use strict'; // enforce variable declarations - safer coding
 
 // Make sure the document is ready before executing scripts
-$(function () {
+jQuery(function ($) {
     // A quick check to make sure the script loaded properly
     console.log('init.js was loaded successfully');
 
@@ -163,50 +163,54 @@ $(function () {
                 return decodeURIComponent(converted);
             },
         };
+    // set adefault font-size value for dateZoom
+    $.fn.dateZoom.defaults.fontsize = '13px';
 
     // Pulls up events in a modal window
-    $('body').on('click', 'li>a', function (event) {
-        // Stops the link from loading view.php
-        event.preventDefault();
+    $('body')
+        .dateZoom()
+        .on('click', 'li>a', function (event) {
+            // Stops the link from loading view.php
+            event.preventDefault();
 
-        // Adds an 'active' class to the link
-        $(this).addClass('active');
+            // Adds an 'active' class to the link
+            $(this).addClass('active');
 
-        // Gets the query string from the link href
-        let data = $(this)
-                .attr('href')
-                .replace(/.+?\?(.*)/, '$1'),
-            // Checks if the modal window exists and
-            // selects it, or creates a new one
+            // Gets the query string from the link href
+            let data = $(this)
+                    .attr('href')
+                    .replace(/.+?\?(.*)/, '$1'),
+                // Checks if the modal window exists and
+                // selects it, or creates a new one
 
-            modal = fx.initModal();
+                modal = fx.initModal();
 
-        // Creates a button to close the window
-        $('<a>')
-            .attr('href', '#')
-            .addClass('modal-close-btn')
-            .html('&times;')
-            .click(function (event) {
-                // Removes modal window
-                fx.boxout(event);
-            })
-            .appendTo(modal);
+            // Creates a button to close the window
+            $('<a>')
+                .attr('href', '#')
+                .addClass('modal-close-btn')
+                .html('&times;')
+                .click(function (event) {
+                    // Removes modal window
+                    fx.boxout(event);
+                })
+                .appendTo(modal);
 
-        // Loads the event data from the DB
-        $.ajax({
-            type: 'POST',
-            url: processFile,
-            data: 'action=eventView&' + data,
-            success: function (data) {
-                fx.boxin(data, modal);
-            },
-            error: function (msg) {
-                modal.append(msg);
-            },
+            // Loads the event data from the DB
+            $.ajax({
+                type: 'POST',
+                url: processFile,
+                data: 'action=eventView&' + data,
+                success: function (data) {
+                    fx.boxin(data, modal);
+                },
+                error: function (msg) {
+                    modal.append(msg);
+                },
+            });
+            //log the link text
+            console.log(data);
         });
-        //log the link text
-        console.log(data);
-    });
 
     // Displays the edit form as a modal window
     $('body').on('click', '.admin-options form, .admin', function (event) {
@@ -288,7 +292,7 @@ $(function () {
 
         // if creating/editing an event, checks for valid dates
         if ($(this).siblings('[name=action]').val() == 'eventEdit') {
-            if (!validDate(start) || !validDate(end)) {
+            if (!$.validDate(start) || !$.validDate(end)) {
                 alert('Valid dates only! (YYYY-MM-DD HH:MM:SS)');
                 return false;
             }
