@@ -214,7 +214,7 @@ $(function () {
         event.preventDefault();
 
         // loads the action for the processing file
-        const action = $(event.target).attr('name') || 'editEvent',
+        let action = $(event.target).attr('name') || 'editEvent',
             // saves the value of the eventId input
             id = $(event.target).siblings('input[name=eventId]').val();
 
@@ -266,9 +266,13 @@ $(function () {
         let formData = $(this).parents('form').serialize();
 
         // stores the value of the submit button
-        (submitVal = $(this).val()),
+        let submitVal = $(this).val(),
             // determines if the event should be removed
-            (remove = false);
+            remove = false,
+            // saves the start date input string
+            start = $(this).siblings('[name=eventStart]').val(),
+            // saves the end date input string
+            end = $(this).siblings('[name=eventEnd]').val();
 
         // if this is the deletion form, appends an action
         if ($(this).attr('name') == 'confirmDelete') {
@@ -279,6 +283,14 @@ $(function () {
             // a flag to remove it from the markup
             if (submitVal == 'Yes, delete it') {
                 remove = true;
+            }
+        }
+
+        // if creating/editing an event, checks for valid dates
+        if ($(this).siblings('[name=action]').val() == 'eventEdit') {
+            if (!validDate(start) || !validDate(end)) {
+                alert('Valid dates only! (YYYY-MM-DD HH:MM:SS)');
+                return false;
             }
         }
 

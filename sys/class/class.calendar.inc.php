@@ -375,6 +375,12 @@ FORM_MARKUP;
     $start = htmlentities($_POST["eventStart"], ENT_QUOTES);
     $end = htmlentities($_POST["eventEnd"], ENT_QUOTES);
 
+    // If the start or end dates aren't in a valid format, exit
+    // the script with an error
+    if (!$this->_validDate($start) || !$this->_validDate($end)) {
+      return 'Invalid date format! Use YYYY-MM-DD HH:MM:SS';
+    }
+
     // If no event ID was passed, create a new event
     if (empty($_POST['eventId'])) {
       $sql = "INSERT INTO events (eventTitle, eventDesc, eventStart, eventEnd)
@@ -574,5 +580,20 @@ ADMIN_OPTIONS;
       </p>
     </form>
 CONFIRM_DELETE;
+  }
+
+  /**
+   * Validates a date string
+   *
+   * @param string $date the date string to validate
+   * @return bool TRUE on success, FALSE on failure
+   */
+  private function _validDate($date)
+  {
+    // define a regex pattern to check the date format
+    $pattern = '/^(\d{4}(-\d{2}){2} (\d{2})(:\d{2}){2})$/';
+
+    // if a match is found, return TRUE. FALSE otherwise.
+    return preg_match($pattern, $date) == 1 ? TRUE : FALSE;
   }
 }
